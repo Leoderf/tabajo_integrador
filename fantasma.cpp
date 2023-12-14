@@ -7,16 +7,7 @@
 #include<cstdlib>
 #include "Header.h"
 
-//void gotoxyy(int x, int y) {
-   // HANDLE hcon;
-   // COORD dwPos = { x, y };
 
-   // hcon = GetStdHandle(STD_OUTPUT_HANDLE);
-
-   // dwPos.X = x;
-   // dwPos.Y = y;
-  //  SetConsoleCursorPosition(hcon, dwPos);
-//}
 
 Fantasma::Fantasma() {
 
@@ -25,124 +16,117 @@ Fantasma::Fantasma() {
     RosY = 16;
     puntaje = 0;
     action = 0;
-
-    newPosX < 129 > 0;
-    newPosY < 29 > 0;
-
+    step = 1;
+    //newPosX < 129 > 0;
+    //newPosY < 29 > 0;
+    newRosX = RosX;
+    newRosY = RosY;
 } 
 
+Fantasma::Fantasma(int X,int Y) {
 
+    vida = 1;
+    RosX = X;
+    RosY = Y;
+    puntaje = 0;
+    action = 0;
+    step = 1;
+
+    newRosX = RosX;
+    newRosY = RosY;
+}
+
+//Movimiento de los fantasmas por gotoxy
 bool Fantasma::move() {
 
     gotoxy(50, 0);
-    cout << action;
+    cout << "fact:" << action;
     limpiaPosicion();
     if (action == 1)     //right
     {
-        newRosX = RosX + 1;
+        RosX = RosX + step;
     }
     if (action == 2)         //left
     {
-        newRosX = RosX - 1;
+        RosX = RosX - step;
     }
     if (action == 3)         //down
     {
-        newRosY = RosY + 1;
+        RosY = RosY + step;
     }
     if (action == 4)         //up
     {
-        newRosY = RosY - 1;
+        RosY = RosY - step;
     }
 
-    // Actualiza RosX y RosY con los nuevos valores
-    RosX = newRosX;
-    RosY = newRosY;
-
+    
     draw();
-    Sleep(50);
+   // Sleep(50);
     return true;
 }
-
+//limpia la posicion del fantasma
 void Fantasma::limpiaPosicion() {
     gotoxy(RosX, RosY); 
     cout << " ";
 
 }
 
-
+//Dibuja el nuevo fantasma
 void Fantasma::draw() {
     gotoxy(RosX, RosY);
     cout << "<";
 }
-
-//void getCloserTo(Jugador playey) 
-//{
-   // if (getPosX() < player.getPosX()) {
-    //    setRosX() = getRosX() + 1
-    //}
-   // if (getPosX() > player.getPosX()) {
-   //     setRosX() = getRosX() - 1
-  //  }
-//}
-void Fantasma::getAction()
+//Aca por medio de gotoxy hago que el fantasma intente acercarce al jugador todo lo posible 
+void Fantasma::getAction(Jugador player)
 {
-    newPosX = RosX;
-    newPosY = RosY;
+    newRosX = RosX;
+    newRosY = RosY;
     //int action = 0;
 
     srand((unsigned)time(NULL));
 
-    // Get a random number
-     action = 1 + (rand() % 4);
+ 
+    int option = 1 + (rand() % 4);
+    if (option == 1)  // achicamos distancia en X
+    {
+        if (player.getPosX() < RosX) { action = 2; }
+        if (player.getPosX() > RosX) { action = 1; }
+    }
+    else if (option == 2) // achicamos distancia en Y
+    {
+        if (player.getPosY() < RosY) { action = 4; }
+        if (player.getPosY() > RosY) { action = 3; }
+    }
+    else {
+        action = 1 + (rand() % 4);
+    }
 
-    
-   
-
-    //if (action == 1)
-   // {
-    //    newPosX = posX + 1;
-    //    action = 0;
-    //}
-   // if (action == 2)
-   // {
-    //    newPosX = posX - 1;
-   //     action = 0;
-    //}
-    //if (action == 3)
-   // {
-    //    newPosY = posY + 1;
-     //   action = 0;
-    //}
-   // if (action == 4)
-   // {
-    //   newPosY = posY - 1;
-     //   action = 0;
-    //}
-    if (action == 1 && RosX + 1 < 129)
+    if (action == 1 && RosX + 1 < 129)      // agrandar en X
     {
-        newPosX = RosX + 1;
+        newRosX = RosX + 1;
     }
-    else if (action == 2 && RosX - 1 >= 0)
+    else if (action == 2 && RosX - 1 >= 0)  // achicar en X
     {
-        newPosX = RosX - 1;
+        newRosX = RosX - 1;   
     }
-    else if (action == 3 && RosY + 1 < 29)
+    else if (action == 3 && RosY + 1 < 29) // agrandar en Y
     {
-       newPosY = RosY + 1;
+        newRosY = RosY + 1;
     }
-    else if (action == 4 && RosY - 1 >= 0)
+    else if (action == 4 && RosY - 1 >= 0) // achicar en Y
     {
-        newPosY = RosY - 1;
+        newRosY = RosY - 1;
     }
-    gotoxy(40, 0);
-    cout << action;
+    gotoxy(60, 0);
+    cout << "fact:" << action << "-" << newRosX << "-" << newRosY;
 
 }
+//funciones para detectar coliciones
 int Fantasma::getNewPosX() {
-    return newPosX;
+    return newRosX;
 }
 int Fantasma::getNewPosY() {
-    return newPosY;
+    return newRosY;
 }
 int Fantasma::getPosX() {
     return RosX;
@@ -150,18 +134,21 @@ int Fantasma::getPosX() {
 int Fantasma::getPosY() {
     return RosY;
 }
+void Fantasma::setPosX(int X) {
 
-//COORD GetConsoleCursorPosition(HANDLE hConsoleOutput)
-//{
-  //  CONSOLE_SCREEN_BUFFER_INFO cbsi;
- //   if (GetConsoleScreenBufferInfo(hConsoleOutput, &cbsi))
-  //  {
-  //      return cbsi.dwCursorPosition;
-  //  }
-  //  else
-  //  {
-        // The function failed. Call GetLastError() for details.
-   //     COORD invalid = { 0, 0 };
-   //     return invalid;
-   // }
-//}
+    RosX = X;
+    return;
+}
+void Fantasma::setPosY(int Y) {
+
+    RosY = Y;
+    return;
+}
+
+void Fantasma::colidedTo(int object) {
+
+    if (object == COMIDA)
+        step = 2;
+    else
+        step = 1;
+}

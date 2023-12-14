@@ -6,28 +6,21 @@
 #include <fcntl.h>
 #include "Header.h"
 
-//void gotoxy(int x, int y) {
-  // HANDLE hcon;
-   // COORD dwPos = { x, y };
 
-   // hcon = GetStdHandle(STD_OUTPUT_HANDLE);
-
-   // dwPos.X = x;
-   // dwPos.Y = y;
-    //SetConsoleCursorPosition(hcon, dwPos);
-//}
 
 Jugador::Jugador() {
 
+    
 	vida = 3;
-	posX = 40;
-	posY = 14;
+	posX = 38;  //40
+	posY = 13;  //14
 	puntaje = 0;
     action = 0;
+    
 }
 
 
-
+//movimiento del jugador por medio de gotoxy
 bool Jugador::move() {
     gotoxy(5, 0);
     cout << action;
@@ -59,18 +52,18 @@ bool Jugador::move() {
     Sleep(50);
 	return true;
 }
-
+//Funcion para borrar la posicion anterior del jugador
 void Jugador::limpiaPosicionJugador() {
     gotoxy(posX, posY);
     cout << " ";
 
 }
-
+//Funcion para dibujar la nueva posicion del jugador
 void Jugador::draw() {
     gotoxy(posX, posY);
     cout << "(";
 }
-
+//Aplico los inputs/entradas de las teclas al movimiento
 void Jugador::getJugadorAction()
 {
     newPosX = posX;
@@ -102,7 +95,7 @@ void Jugador::getJugadorAction()
     cout << action;
     
 }
-
+//Funciones para detectar las coliciones
 int Jugador::getNewPosX() {
     return newPosX;
 }
@@ -115,7 +108,7 @@ int Jugador::getPosX() {
 int Jugador::getPosY() {
     return posY;
 }
-
+//puntaje del jugador
 void Jugador::setPlayerPoints(int puntos) {
     
     puntaje = puntos;
@@ -125,24 +118,10 @@ int Jugador::getPlayerPoints() {
 
     return puntaje;
 }
-
+//La funcion de comer
 void Jugador::eatFood() {
 
-    puntaje = puntaje + 5; //laComida.getPuntos();
+    puntaje = puntaje + 5; 
+
 
 }
-
-//COORD GetConsoleCursorPosition(HANDLE hConsoleOutput)
-//{
-   // CONSOLE_SCREEN_BUFFER_INFO cbsi;
-   // if (GetConsoleScreenBufferInfo(hConsoleOutput, &cbsi))
-   // {
-   //     return cbsi.dwCursorPosition;
-   // }
-    //else
-   // {
-        // The function failed. Call GetLastError() for details.
-       // COORD invalid = { 0, 0 };
-       // return invalid;
-    //}
-//}
